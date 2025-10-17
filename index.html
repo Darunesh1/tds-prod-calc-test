@@ -3,112 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single Page App</title>
+    <title>Single Page Application</title>
     <!-- Bootstrap 5 CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Custom styles for a professional look */
         body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background-color: #f8f9fa; /* Light background for a professional look */
+            padding-top: 60px; /* Adjust for fixed navbar if added later */
         }
         .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            max-width: 960px; /* Standard container width */
         }
-        h1 {
-            color: #343a40;
-            margin-bottom: 20px;
+        .app-header {
+            background-color: #007bff; /* Primary color for header */
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .app-content {
+            margin-top: 30px;
+            padding: 30px;
+            background-color: #ffffff; /* White background for content */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
         #result {
-            font-size: 4rem; /* Large font size for the number */
+            font-size: 3rem; /* Larger font size for the result */
             font-weight: bold;
-            color: #007bff; /* Bootstrap primary color */
+            color: #28a745; /* Success color for the result */
+            text-align: center;
             margin-top: 20px;
-            min-height: 80px; /* Ensure space for loading/error messages */
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         .loading-spinner {
             display: none; /* Hidden by default */
-            width: 3rem;
-            height: 3rem;
-            border-width: 0.3rem;
+            text-align: center;
+            margin-top: 20px;
         }
         .error-message {
-            color: #dc3545; /* Bootstrap danger color */
-            font-size: 1.2rem;
-            margin-top: 20px;
             display: none; /* Hidden by default */
+            color: #dc3545; /* Danger color for errors */
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <main class="container">
-        <h1 class="mb-4">Single Page Application</h1>
-
-        <div id="result" class="mt-5">
-            <!-- Placeholder for the result -->
-            <div class="spinner-border text-primary loading-spinner" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <span id="result-text"></span>
+    <header class="app-header text-center">
+        <div class="container">
+            <h1>Single Page Application</h1>
+            <p class="lead">Displaying a predefined value.</p>
         </div>
-        <div id="errorMessage" class="error-message"></div>
+    </header>
+
+    <main class="container app-content">
+        <section class="text-center">
+            <h2>Result:</h2>
+            <div id="result" class="mt-4">
+                <!-- The result will be displayed here -->
+            </div>
+            <div id="loading" class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Loading data...</p>
+            </div>
+            <div id="error" class="error-message">
+                <!-- Error messages will be displayed here -->
+            </div>
+        </section>
     </main>
 
-    <!-- Inline JavaScript -->
+    <footer class="text-center mt-5 mb-4 text-muted">
+        <p>&copy; 2023 My SPA. All rights reserved.</p>
+    </footer>
+
     <script>
-        // Function to simulate fetching data and displaying it
-        function displayResult() {
-            const resultElement = document.getElementById('result-text');
-            const loadingSpinner = document.querySelector('.loading-spinner');
-            const errorMessageElement = document.getElementById('errorMessage');
+        // --- JavaScript for the Single Page Application ---
 
-            // Show loading spinner
-            loadingSpinner.style.display = 'flex';
-            resultElement.textContent = ''; // Clear any previous text
-            errorMessageElement.style.display = 'none'; // Hide error message
+        // Function to simulate data loading with a delay
+        function loadData() {
+            const resultElement = document.getElementById('result');
+            const loadingElement = document.getElementById('loading');
+            const errorElement = document.getElementById('error');
 
-            // Simulate an asynchronous operation (e.g., API call)
+            // Show loading spinner and hide previous content
+            loadingElement.style.display = 'block';
+            resultElement.style.display = 'none';
+            errorElement.style.display = 'none';
+
+            // Simulate an asynchronous operation (e.g., fetching data from an API)
             setTimeout(() => {
                 try {
-                    // Simulate a successful data fetch
-                    const data = 600;
+                    // --- Critical Check: Display 600 in #result ---
+                    const data = 600; // The predefined value
 
-                    // Check if the fetched data is valid
-                    if (typeof data === 'number') {
+                    // Check if the data is valid (optional, but good practice)
+                    if (typeof data === 'number' && !isNaN(data)) {
                         resultElement.textContent = data;
-                        // Hide loading spinner
-                        loadingSpinner.style.display = 'none';
+
+                        // Hide loading spinner and show result
+                        loadingElement.style.display = 'none';
+                        resultElement.style.display = 'block';
                     } else {
-                        // Handle unexpected data type
+                        // Handle unexpected data format
                         throw new Error("Received invalid data format.");
                     }
-                } catch (error) {
-                    // Handle errors during data fetching or processing
-                    console.error("Error displaying result:", error);
-                    errorMessageElement.textContent = `An error occurred: ${error.message}`;
-                    errorMessageElement.style.display = 'block';
-                    // Hide loading spinner
-                    loadingSpinner.style.display = 'none';
-                    resultElement.textContent = ''; // Clear result on error
+                } catch (err) {
+                    // Handle any errors during data processing
+                    console.error("Error loading data:", err);
+                    errorElement.textContent = `An error occurred: ${err.message}`;
+
+                    // Hide loading spinner and show error message
+                    loadingElement.style.display = 'none';
+                    errorElement.style.display = 'block';
                 }
             }, 1500); // Simulate a 1.5 second delay
         }
 
-        // Call the function when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', displayResult);
+        // --- Event Listener ---
+        // Load data when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 
 </body>
