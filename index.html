@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page App</title>
+    <!-- Bootstrap 5 CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for a professional look */
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        #result {
+            font-size: 4rem; /* Large font size for the number */
+            font-weight: bold;
+            color: #007bff; /* Bootstrap primary color */
+            margin-top: 20px;
+            min-height: 80px; /* Ensure space for loading/error messages */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner {
+            display: none; /* Hidden by default */
+            width: 3rem;
+            height: 3rem;
+            border-width: 0.3rem;
+        }
+        .error-message {
+            color: #dc3545; /* Bootstrap danger color */
+            font-size: 1.2rem;
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1 class="mb-4">Single Page Application</h1>
+
+        <div id="result" class="mt-5">
+            <!-- Placeholder for the result -->
+            <div class="spinner-border text-primary loading-spinner" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <span id="result-text"></span>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+    </main>
+
+    <!-- Inline JavaScript -->
+    <script>
+        // Function to simulate fetching data and displaying it
+        function displayResult() {
+            const resultElement = document.getElementById('result-text');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const errorMessageElement = document.getElementById('errorMessage');
+
+            // Show loading spinner
+            loadingSpinner.style.display = 'flex';
+            resultElement.textContent = ''; // Clear any previous text
+            errorMessageElement.style.display = 'none'; // Hide error message
+
+            // Simulate an asynchronous operation (e.g., API call)
+            setTimeout(() => {
+                try {
+                    // Simulate a successful data fetch
+                    const data = 600;
+
+                    // Check if the fetched data is valid
+                    if (typeof data === 'number') {
+                        resultElement.textContent = data;
+                        // Hide loading spinner
+                        loadingSpinner.style.display = 'none';
+                    } else {
+                        // Handle unexpected data type
+                        throw new Error("Received invalid data format.");
+                    }
+                } catch (error) {
+                    // Handle errors during data fetching or processing
+                    console.error("Error displaying result:", error);
+                    errorMessageElement.textContent = `An error occurred: ${error.message}`;
+                    errorMessageElement.style.display = 'block';
+                    // Hide loading spinner
+                    loadingSpinner.style.display = 'none';
+                    resultElement.textContent = ''; // Clear result on error
+                }
+            }, 1500); // Simulate a 1.5 second delay
+        }
+
+        // Call the function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', displayResult);
+    </script>
+
+</body>
+</html>
